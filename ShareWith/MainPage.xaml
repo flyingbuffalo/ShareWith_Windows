@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="ShareWith.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ShareWith"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Button Content="Button" HorizontalAlignment="Left" Margin="7,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="#42FF90" />
+
+        <Button Content="Button" HorizontalAlignment="Left" Margin="216,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="#42FF90" BorderThickness="0" />
+
+        <Button Content="Button" HorizontalAlignment="Left" Margin="7,223,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="#42FF90" BorderThickness="3" />
+
+        <Button Content="Button" HorizontalAlignment="Left" Margin="216,223,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="SpringGreen" />
+
+    </Grid>
+</Page>
