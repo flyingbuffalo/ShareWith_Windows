@@ -7,18 +7,60 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Button" HorizontalAlignment="Left" Margin="7,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
-                Background="#42FF90" />
+    <!--Page.Resources>
+        <Style TargetType="Button" >
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="Black" />
+        </Style>
+    </Page.Resources-->
 
-        <Button Content="Button" HorizontalAlignment="Left" Margin="216,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
-                Background="#42FF90" BorderThickness="0" />
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,0,0,-161">
 
-        <Button Content="Button" HorizontalAlignment="Left" Margin="7,223,0,0" VerticalAlignment="Top" Height="199" Width="195"
-                Background="#42FF90" BorderThickness="3" />
+        <Grid HorizontalAlignment="Left" Margin="690,7,0,0" VerticalAlignment="Top" Height="1000" Width="1000"
+              Background="White" />
 
-        <Button Content="Button" HorizontalAlignment="Left" Margin="216,223,0,0" VerticalAlignment="Top" Height="199" Width="195"
-                Background="SpringGreen" />
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="43,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="MediumAquamarine" Foreground="Black" BorderBrush="Black"/>
+
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="474,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="MediumSeaGreen" Foreground="Black" BorderBrush="Black"/>
+
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="257,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+                Background="Turquoise" Foreground="Black"  BorderBrush="Black"/>
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="43,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumAquamarine" />
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="474,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumSeaGreen" />
+
+
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="257,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="Turquoise" />
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="43,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumAquamarine" BorderThickness="0" />
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="474,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumSeaGreen" BorderThickness="0" />
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="257,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="Turquoise" BorderThickness="0" />
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="703,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumAquamarine" Foreground="Black" BorderBrush="Black"/>
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="1134,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumSeaGreen" Foreground="Black" BorderBrush="Black"/>
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="917,7,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="Turquoise" Foreground="Black" BorderBrush="Black" />
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="703,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumAquamarine" />
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="1134,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumSeaGreen" />
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="917,246,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="Turquoise" />
+        <Button Content="MediumAquamarine"  HorizontalAlignment="Left" Margin="703,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumAquamarine" BorderThickness="0" />
+        <Button Content="MediumSeaGreen" HorizontalAlignment="Left" Margin="1134,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="MediumSeaGreen" BorderThickness="0" />
+        <Button Content="Turquoise" HorizontalAlignment="Left" Margin="917,493,0,0" VerticalAlignment="Top" Height="199" Width="195"
+        	Background="Turquoise" BorderThickness="0" />
+
+        
 
     </Grid>
 </Page>
