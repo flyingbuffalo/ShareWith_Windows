@@ -6,14 +6,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ItemsTemplatePanel"
     xmlns:common="using:ItemsTemplatePanel.Common"
+    xmlns:controls="using:WinRTXamlToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Page.Resources>
-
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">ItemsTemplatePanel</x:String>
+        <x:String x:Key="AppName">ShareWith</x:String>
     </Page.Resources>
 
     <!--
@@ -33,42 +33,20 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="{StaticResource AppName}" Style="{StaticResource PageHeaderTextStyle}"/>
+            <Button x:Name="backButton" Click="GoBack" 
+                    IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" 
+                    Style="{StaticResource BackButtonStyle}"/>
+            <TextBlock x:Name="pageTitle"
+                       Grid.Column="1" Text="{StaticResource AppName}" 
+                       Style="{StaticResource PageHeaderTextStyle}"/>
         </Grid>
 
-        <Button Grid.Row="1" Content="CircleItemsPanel Sample" Width="600" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Margin="0,0,0,0" Click="Button_Click" />
-        <Button Grid.Row="1" Content="LoopItemsPanel Sample" Width="600" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50" Margin="0,200,0,0" Click="Button_Click_1" />
-
-
-        <VisualStateManager.VisualStateGroups>
-
-            <!-- Visual states reflect the application's view state -->
-            <VisualStateGroup x:Name="ApplicationViewStates">
-                <VisualState x:Name="FullScreenLandscape"/>
-                <VisualState x:Name="Filled"/>
-
-                <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
-                <VisualState x:Name="FullScreenPortrait">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-
-                <!-- The back button and title have different styles when snapped -->
-                <VisualState x:Name="Snapped">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedBackButtonStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
+        <controls:ImageButton
+                Grid.Row="1" Height="200" Width="200" 
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="586,168,580,260" Click="Button_Click" 
+                NormalStateImageSource="Assets/btn_share.png"
+                PressedStateImageSource="Assets/btn_share_p.png"
+                RecyclePressedStateImageForHover="True" />         
     </Grid>
 </common:LayoutAwarePage>

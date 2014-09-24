@@ -55,10 +55,10 @@ namespace ItemsTemplatePanel
             this.Frame.Navigate(typeof (CircleSample));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Image_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(LoopListPage));
-   
+
         }
+
     }
 }

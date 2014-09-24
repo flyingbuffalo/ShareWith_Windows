@@ -17,7 +17,8 @@
             </ResourceDictionary.MergedDictionaries>
             
             <local:MainPageViewModel x:Key="MainPageViewModel"/>
-
         </ResourceDictionary>
     </Application.Resources>
+    
+    
 </Application>

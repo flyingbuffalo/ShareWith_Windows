@@ -120,9 +120,6 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Controls\LoopItemsPanel.cs" />
     <Compile Include="Controls\CircleItemsPanel.cs" />
-    <Compile Include="LoopListPage.xaml.cs">
-      <DependentUpon>LoopListPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -139,6 +136,20 @@
     <None Include="Carrousel_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\btn_android.png" />
+    <Content Include="Assets\btn_android_p.png" />
+    <Content Include="Assets\btn_back_arrow.png" />
+    <Content Include="Assets\btn_back_arrow_p.png" />
+    <Content Include="Assets\btn_com.png" />
+    <Content Include="Assets\btn_com_p.png" />
+    <Content Include="Assets\btn_share.png" />
+    <Content Include="Assets\btn_share_p.png" />
+    <Content Include="Assets\btn_w_android.png" />
+    <Content Include="Assets\btn_w_android_p.png" />
+    <Content Include="Assets\btn_w_com.png" />
+    <Content Include="Assets\btn_w_com_p.png" />
+    <Content Include="Assets\check_sharing_done.png" />
+    <Content Include="Assets\devices_list_circle.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\pic01.jpg" />
     <Content Include="Assets\pic02.jpg" />
@@ -146,6 +157,8 @@
     <Content Include="Assets\pic04.jpg" />
     <Content Include="Assets\pic05.jpg" />
     <Content Include="Assets\pic06.jpg" />
+    <Content Include="Assets\progress_sharing_background.png" />
+    <Content Include="Assets\progress_sharing_foreground.png" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
@@ -164,10 +177,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LoopListPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +187,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Downloads\WinRT XAML Toolkit - 1.6.1.3 - Source\WinRTXamlToolkit\WinRTXamlToolkit.csproj">
+      <Project>{7b7966be-213f-4b84-867d-2a0ccf61245f}</Project>
+      <Name>WinRTXamlToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\WFDWindows\WFDWindows\WFDWindows.csproj">
       <Project>{3f3c9a3d-d672-43d0-b7d1-12df099a0edb}</Project>
       <Name>WFDWindows</Name>
