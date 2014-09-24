@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -14,18 +15,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
+// 새 응용 프로그램 템플릿에 대한 설명은 http://go.microsoft.com/fwlink/?LinkId=234227에 나와 있습니다.
 
-namespace ItemsTemplatePanel
+namespace ShareWith
 {
     /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    /// 기본 응용 프로그램 클래스를 보완하는 응용 프로그램별 동작을 제공합니다.
     /// </summary>
     sealed partial class App : Application
     {
         /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
+        /// Singleton 응용 프로그램 개체를 초기화합니다.  이것은 실행되는 작성 코드의 첫 번째
+        /// 줄이며 따라서 main() 또는 WinMain()과 논리적으로 동일합니다.
         /// </summary>
         public App()
         {
@@ -34,56 +35,74 @@ namespace ItemsTemplatePanel
         }
 
         /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used when the application is launched to open a specific file, to display
-        /// search results, and so forth.
+        /// 최종 사용자가 응용 프로그램을 정상적으로 시작할 때 호출됩니다.  다른 진입점은
+        /// 응용 프로그램에서 특정 파일을 열기 시작할 때 사용됩니다.
         /// </summary>
-        /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        /// <param name="e">시작 요청 및 프로세스에 대한 정보입니다.</param>
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+
+#if DEBUG
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                this.DebugSettings.EnableFrameRateCounter = true;
+            }
+#endif
+
             Frame rootFrame = Window.Current.Content as Frame;
 
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
+            // 창에 콘텐츠가 이미 있는 경우 앱 초기화를 반복하지 말고,
+            // 창이 활성화되어 있는지 확인하십시오.
             if (rootFrame == null)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
+                // 탐색 컨텍스트로 사용할 프레임을 만들고 첫 페이지로 이동합니다.
                 rootFrame = new Frame();
+                // 기본 언어 설정
+                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
-                if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                rootFrame.NavigationFailed += OnNavigationFailed;
+
+                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    //TODO: Load state from previously suspended application
+                    //TODO: 이전에 일시 중지된 응용 프로그램에서 상태를 로드합니다.
                 }
 
-                // Place the frame in the current Window
+                // 현재 창에 프레임 넣기
                 Window.Current.Content = rootFrame;
             }
 
             if (rootFrame.Content == null)
             {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                if (!rootFrame.Navigate(typeof(MainPage), args.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+                // 탐색 스택이 복원되지 않으면 첫 번째 페이지로 돌아가고
+                // 필요한 정보를 탐색 매개 변수로 전달하여 새 페이지를
+                // 구성합니다.
+                rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
-            // Ensure the current window is active
+            // 현재 창이 활성 창인지 확인
             Window.Current.Activate();
         }
 
         /// <summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
+        /// 특정 페이지 탐색에 실패한 경우 호출됨
         /// </summary>
-        /// <param name="sender">The source of the suspend request.</param>
-        /// <param name="e">Details about the suspend request.</param>
+        /// <param name="sender">탐색을 실패한 프레임</param>
+        /// <param name="e">탐색 실패에 대한 정보</param>
+        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        {
+            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+        }
+
+        /// <summary>
+        /// 응용 프로그램 실행이 일시 중지된 경우 호출됩니다.  응용 프로그램이 종료될지
+        /// 또는 메모리 콘텐츠를 변경하지 않고 다시 시작할지 여부를 결정하지 않은 채
+        /// 응용 프로그램 상태가 저장됩니다.
+        /// </summary>
+        /// <param name="sender">일시 중지된 요청의 소스입니다.</param>
+        /// <param name="e">일시 중지된 요청에 대한 세부 정보입니다.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+            //TODO: 응용 프로그램 상태를 저장하고 백그라운드 작업을 모두 중지합니다.
             deferral.Complete();
         }
     }

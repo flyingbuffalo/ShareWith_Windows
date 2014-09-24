@@ -2,27 +2,27 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-[assembly: AssemblyTitle("ItemsTemplatePanel")]
+// 어셈블리의 일반 정보는 다음 특성 집합을 통해 
+// 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
+// 이 특성 값을 변경하십시오.
+[assembly: AssemblyTitle("ShareWith")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ItemsTemplatePanel")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyProduct("ShareWith")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Version information for an assembly consists of the following four values:
+// 어셈블리의 버전 정보는 다음 네 가지 값으로 구성됩니다.
 //
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
+//      주 버전
+//      부 버전 
+//      빌드 번호
+//      수정 버전
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
+// 모든 값을 지정하거나 아래와 같이 '*'를 사용하여 빌드 번호 및 수정 버전이 자동으로 
+// 지정되도록 할 수 있습니다.
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

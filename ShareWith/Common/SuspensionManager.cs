@@ -11,14 +11,14 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ItemsTemplatePanel.Common
+namespace ShareWith.Common
 {
     /// <summary>
-    /// SuspensionManager captures global session state to simplify process lifetime management
-    /// for an application.  Note that session state will be automatically cleared under a variety
-    /// of conditions and should only be used to store information that would be convenient to
-    /// carry across sessions, but that should be discarded when an application crashes or is
-    /// upgraded.
+    /// SuspensionManager는 전역 세션 상태를 capture하여 응용 프로그램에 대한 프로세스
+    /// 수명 관리를 간단하게 합니다. 세션 상태는 다양한 조건에 따라 자동으로
+    /// 지워지므로 세션 간에 이동하기 쉽지만 응용 프로그램이 충돌하거나
+    /// 업그레이드될 때 삭제되어야 하는 정보를 저장하는 데에만 사용되어야
+    /// 합니다.
     /// </summary>
     internal sealed class SuspensionManager
     {
@@ -27,11 +27,11 @@ namespace ItemsTemplatePanel.Common
         private const string sessionStateFilename = "_sessionState.xml";
 
         /// <summary>
-        /// Provides access to global session state for the current session.  This state is
-        /// serialized by <see cref="SaveAsync"/> and restored by
-        /// <see cref="RestoreAsync"/>, so values must be serializable by
-        /// <see cref="DataContractSerializer"/> and should be as compact as possible.  Strings
-        /// and other self-contained data types are strongly recommended.
+        /// 현재 세션의 전역 세션 상태에 대한 액세스를 제공합니다. 이 상태는
+        /// <see cref="SaveAsync"/>로 serialize되고 <see cref="RestoreAsync"/>로
+        /// 복원되므로 값은 <see cref="DataContractSerializer"/>로 serialize할
+        /// 수 있고 가능한 한 간단해야 합니다. 문자열 및 기타 자체 포함 데이터 형식을
+        /// 사용하는 것이 좋습니다.
         /// </summary>
         public static Dictionary<string, object> SessionState
         {
@@ -39,9 +39,9 @@ namespace ItemsTemplatePanel.Common
         }
 
         /// <summary>
-        /// List of custom types provided to the <see cref="DataContractSerializer"/> when
-        /// reading and writing session state.  Initially empty, additional types may be
-        /// added to customize the serialization process.
+        /// 세션 상태를 읽고 쓸 때 <see cref="DataContractSerializer"/>에 제공되는
+        /// 사용자 지정 형식 목록입니다. 처음에는 비어 있고 serialization 프로세스를
+        /// 사용자 지정하기 위해 추가 형식을 추가할 수도 있습니다.
         /// </summary>
         public static List<Type> KnownTypes
         {
@@ -49,17 +49,17 @@ namespace ItemsTemplatePanel.Common
         }
 
         /// <summary>
-        /// Save the current <see cref="SessionState"/>.  Any <see cref="Frame"/> instances
-        /// registered with <see cref="RegisterFrame"/> will also preserve their current
-        /// navigation stack, which in turn gives their active <see cref="Page"/> an opportunity
-        /// to save its state.
+        /// 현재 <see cref="SessionState"/>를 저장합니다. <see cref="RegisterFrame"/>에 등록된
+        /// 모든 <see cref="Frame"/> 인스턴스는 현재 탐색 스택도 유지합니다.
+        /// 따라서 활성 <see cref="Page"/>에 해당 상태를 저장할 수 있는 기회를
+        /// 제공합니다.
         /// </summary>
-        /// <returns>An asynchronous task that reflects when session state has been saved.</returns>
+        /// <returns>세션 상태가 저장된 시기를 반영하는 비동기 작업입니다.</returns>
         public static async Task SaveAsync()
         {
             try
             {
-                // Save the navigation state for all registered frames
+                // 등록된 모든 프레임에 대한 탐색 상태를 저장합니다.
                 foreach (var weakFrameReference in _registeredFrames)
                 {
                     Frame frame;
@@ -69,19 +69,18 @@ namespace ItemsTemplatePanel.Common
                     }
                 }
 
-                // Serialize the session state synchronously to avoid asynchronous access to shared
-                // state
+                // 공유 상태에 대해 비동기적으로 액세스하지 못하도록 세션 상태를 동기적으로
+                // serialize합니다.
                 MemoryStream sessionData = new MemoryStream();
                 DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, object>), _knownTypes);
                 serializer.WriteObject(sessionData, _sessionState);
 
-                // Get an output stream for the SessionState file and write the state asynchronously
+                // SessionState 파일에 대한 출력 스트림을 가져와 상태를 비동기적으로 씁니다.
                 StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync(sessionStateFilename, CreationCollisionOption.ReplaceExisting);
                 using (Stream fileStream = await file.OpenStreamForWriteAsync())
                 {
                     sessionData.Seek(0, SeekOrigin.Begin);
                     await sessionData.CopyToAsync(fileStream);
-                    await fileStream.FlushAsync();
                 }
             }
             catch (Exception e)
@@ -91,34 +90,36 @@ namespace ItemsTemplatePanel.Common
         }
 
         /// <summary>
-        /// Restores previously saved <see cref="SessionState"/>.  Any <see cref="Frame"/> instances
-        /// registered with <see cref="RegisterFrame"/> will also restore their prior navigation
-        /// state, which in turn gives their active <see cref="Page"/> an opportunity restore its
-        /// state.
+        /// 이전에 저장된 <see cref="SessionState"/>를 복원합니다. <see cref="RegisterFrame"/>으로 등록된 모든
+        /// <see cref="Frame"/> 인스턴스도 이전의 탐색 상태를 복원합니다.
+        /// 따라서 활성 <see cref="Page"/>에 해당 상태를 복원할 수 있는 기회를
+        /// 제공합니다.
         /// </summary>
-        /// <returns>An asynchronous task that reflects when session state has been read.  The
-        /// content of <see cref="SessionState"/> should not be relied upon until this task
-        /// completes.</returns>
-        public static async Task RestoreAsync()
+        /// <param name="sessionBaseKey">세션의 형식을 식별하는 선택 키입니다.
+        /// 이것은 여러 응용 프로그램 시작 시나리오의 구분에 사용할 수 있습니다.</param>
+        /// <returns>세션 상태를 읽은 시기를 반영하는 비동기 작업입니다.
+        /// <see cref="SessionState"/>의 내용은 이 작업이 완료될 때까지 신뢰해서는
+        /// 안 됩니다.</returns>
+        public static async Task RestoreAsync(String sessionBaseKey = null)
         {
             _sessionState = new Dictionary<String, Object>();
 
             try
             {
-                // Get the input stream for the SessionState file
+                // SessionState 파일에 대한 입력 스트림을 가져옵니다.
                 StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync(sessionStateFilename);
                 using (IInputStream inStream = await file.OpenSequentialReadAsync())
                 {
-                    // Deserialize the Session State
+                    // 세션 상태를 deserialize합니다.
                     DataContractSerializer serializer = new DataContractSerializer(typeof(Dictionary<string, object>), _knownTypes);
                     _sessionState = (Dictionary<string, object>)serializer.ReadObject(inStream.AsStreamForRead());
                 }
 
-                // Restore any registered frames to their saved state
+                // 등록된 모든 프레임을 저장된 상태로 복원합니다.
                 foreach (var weakFrameReference in _registeredFrames)
                 {
                     Frame frame;
-                    if (weakFrameReference.TryGetTarget(out frame))
+                    if (weakFrameReference.TryGetTarget(out frame) && (string)frame.GetValue(FrameSessionBaseKeyProperty) == sessionBaseKey)
                     {
                         frame.ClearValue(FrameSessionStateProperty);
                         RestoreFrameNavigationState(frame);
@@ -133,23 +134,27 @@ namespace ItemsTemplatePanel.Common
 
         private static DependencyProperty FrameSessionStateKeyProperty =
             DependencyProperty.RegisterAttached("_FrameSessionStateKey", typeof(String), typeof(SuspensionManager), null);
+        private static DependencyProperty FrameSessionBaseKeyProperty =
+            DependencyProperty.RegisterAttached("_FrameSessionBaseKeyParams", typeof(String), typeof(SuspensionManager), null);
         private static DependencyProperty FrameSessionStateProperty =
             DependencyProperty.RegisterAttached("_FrameSessionState", typeof(Dictionary<String, Object>), typeof(SuspensionManager), null);
         private static List<WeakReference<Frame>> _registeredFrames = new List<WeakReference<Frame>>();
 
         /// <summary>
-        /// Registers a <see cref="Frame"/> instance to allow its navigation history to be saved to
-        /// and restored from <see cref="SessionState"/>.  Frames should be registered once
-        /// immediately after creation if they will participate in session state management.  Upon
-        /// registration if state has already been restored for the specified key
-        /// the navigation history will immediately be restored.  Subsequent invocations of
-        /// <see cref="RestoreAsync"/> will also restore navigation history.
+        /// <see cref="Frame"/> 인스턴스를 등록하면 해당 탐색 기록을
+        /// <see cref="SessionState"/>에 저장하고 여기서 복원합니다. 프레임이 세션 상태 관리에
+        /// 참여할 경우 프레임은 작성 후 바로 등록해야 합니다.
+        /// 상태가 지정된 키에 대해 이미 복원된 경우 등록하면
+        /// 탐색 기록은 바로 복원됩니다. <see cref="RestoreAsync(String)"/>의
+        /// <see cref="RestoreAsync"/> 후속 호출도 탐색 기록을 복원합니다.
         /// </summary>
-        /// <param name="frame">An instance whose navigation history should be managed by
+        /// <param name="frame">탐색 기록이 <see cref="SuspensionManager"/>에서 관리되어야 하는
         /// <see cref="SuspensionManager"/></param>
-        /// <param name="sessionStateKey">A unique key into <see cref="SessionState"/> used to
-        /// store navigation-related information.</param>
-        public static void RegisterFrame(Frame frame, String sessionStateKey)
+        /// <param name="sessionStateKey">탐색 관련 정보를 저장하는 데 사용되는 <see cref="SessionState"/>의
+        /// 고유한 키입니다.</param>
+        /// <param name="sessionBaseKey">세션의 형식을 식별하는 선택 키입니다.
+        /// 이것은 여러 응용 프로그램 시작 시나리오의 구분에 사용할 수 있습니다.</param>
+        public static void RegisterFrame(Frame frame, String sessionStateKey, String sessionBaseKey = null)
         {
             if (frame.GetValue(FrameSessionStateKeyProperty) != null)
             {
@@ -161,26 +166,32 @@ namespace ItemsTemplatePanel.Common
                 throw new InvalidOperationException("Frames must be either be registered before accessing frame session state, or not registered at all");
             }
 
-            // Use a dependency property to associate the session key with a frame, and keep a list of frames whose
-            // navigation state should be managed
+            if (!string.IsNullOrEmpty(sessionBaseKey))
+            {
+                frame.SetValue(FrameSessionBaseKeyProperty, sessionBaseKey);
+                sessionStateKey = sessionBaseKey + "_" + sessionStateKey;
+            }
+
+            // 종속성 속성을 사용하여 세션 키를 프레임에 연결하고, 탐색 상태를 관리해야 하는
+            // 프레임 목록을 유지합니다.
             frame.SetValue(FrameSessionStateKeyProperty, sessionStateKey);
             _registeredFrames.Add(new WeakReference<Frame>(frame));
 
-            // Check to see if navigation state can be restored
+            // 탐색 상태를 복원할 수 있는지 확인하십시오.
             RestoreFrameNavigationState(frame);
         }
 
         /// <summary>
-        /// Disassociates a <see cref="Frame"/> previously registered by <see cref="RegisterFrame"/>
-        /// from <see cref="SessionState"/>.  Any navigation state previously captured will be
-        /// removed.
+        /// <see cref="RegisterFrame"/>으로 <see cref="SessionState"/>에서 이전에 등록된
+        /// <see cref="Frame"/>의 연결을 끊습니다. 이전에 캡처된 모두 탐색 상태는
+        /// 제거됩니다.
         /// </summary>
-        /// <param name="frame">An instance whose navigation history should no longer be
-        /// managed.</param>
+        /// <param name="frame">탐색 기록이 더 이상 관리되지 않는
+        ///인스턴스입니다.</param>
         public static void UnregisterFrame(Frame frame)
         {
-            // Remove session state and remove the frame from the list of frames whose navigation
-            // state will be saved (along with any weak references that are no longer reachable)
+            // 세션 상태를 제거하고 탐색 상태가 더 이상 접근할 수 없는 약한 참조와 함께 저장되는
+            // 프레임 목록에서 프레임을 제거합니다.
             SessionState.Remove((String)frame.GetValue(FrameSessionStateKeyProperty));
             _registeredFrames.RemoveAll((weakFrameReference) =>
             {
@@ -190,18 +201,18 @@ namespace ItemsTemplatePanel.Common
         }
 
         /// <summary>
-        /// Provides storage for session state associated with the specified <see cref="Frame"/>.
-        /// Frames that have been previously registered with <see cref="RegisterFrame"/> have
-        /// their session state saved and restored automatically as a part of the global
-        /// <see cref="SessionState"/>.  Frames that are not registered have transient state
-        /// that can still be useful when restoring pages that have been discarded from the
-        /// navigation cache.
+        /// 지정된 <see cref="Frame"/>에 연결된 세션 상태에 대한 저장소를 제공합니다.
+        /// <see cref="RegisterFrame"/>으로 이미 등록된 프레임에는
+        /// 세션 상태가 <see cref="SessionState"/>의 일부로 자동으로 저장 및
+        /// 복원됩니다. 등록되지 않은 프레임에는 탐색 캐시에서
+        /// 삭제된 페이지를 복원할 때 유용할 수 있는 임시 상태가
+        /// 있습니다.
         /// </summary>
-        /// <remarks>Apps may choose to rely on <see cref="LayoutAwarePage"/> to manage
-        /// page-specific state instead of working with frame session state directly.</remarks>
-        /// <param name="frame">The instance for which session state is desired.</param>
-        /// <returns>A collection of state subject to the same serialization mechanism as
-        /// <see cref="SessionState"/>.</returns>
+        /// <remarks>앱은 <see cref="NavigationHelper"/>를 사용하도록 선택하여
+        /// 프레임 세션 상태로 직접 작업하는 대신 페이지별 상태를 관리할 수도 있습니다.</remarks>
+        /// <param name="frame">세션 상태가 필요한 인스턴스입니다.</param>
+        /// <returns><see cref="SessionState"/>와 동일한 serialization 메커니즘을 따르는 상태
+        /// 컬렉션입니다.</returns>
         public static Dictionary<String, Object> SessionStateForFrame(Frame frame)
         {
             var frameState = (Dictionary<String, Object>)frame.GetValue(FrameSessionStateProperty);
@@ -211,7 +222,7 @@ namespace ItemsTemplatePanel.Common
                 var frameSessionKey = (String)frame.GetValue(FrameSessionStateKeyProperty);
                 if (frameSessionKey != null)
                 {
-                    // Registered frames reflect the corresponding session state
+                    // 등록된 프레임은 해당 세션 상태를 반영합니다.
                     if (!_sessionState.ContainsKey(frameSessionKey))
                     {
                         _sessionState[frameSessionKey] = new Dictionary<String, Object>();
@@ -220,7 +231,7 @@ namespace ItemsTemplatePanel.Common
                 }
                 else
                 {
-                    // Frames that aren't registered have transient state
+                    // 등록되지 않은 프레임에는 임시 상태가 있습니다.
                     frameState = new Dictionary<String, Object>();
                 }
                 frame.SetValue(FrameSessionStateProperty, frameState);
