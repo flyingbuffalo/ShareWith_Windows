@@ -102,5 +102,10 @@ namespace ShareWith
         }
 
         #endregion
+
+        private void btnDiscovery_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
