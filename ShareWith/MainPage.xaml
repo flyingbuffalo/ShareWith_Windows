@@ -49,11 +49,6 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
 
-        <TextBlock x:Name="tbReceivedText"
-                   HorizontalAlignment="Left" Margin="250,275,0,0"
-                   TextWrapping="Wrap" Text="Received Text:"
-                   VerticalAlignment="Top" Height="200" Width="524" />
-
         <controls:ImageButton x:Name="btnDiscovery"  Grid.Row="1" 
                               Height="200" Width="200"
                               Margin="0,-100,0,0"
@@ -64,7 +59,8 @@
                               Click="btnDiscovery_Click" />
         
         <Grid Grid.Row="2" >
-            <TextBlock x:Name="txtMessage" Margin="20, 10, 20, 10"
+            <TextBlock x:Name="txtMessage" Margin="20, 10, 20, 10" 
+                       TextWrapping="Wrap" 
                        FontSize="20" Text="output:" />
         </Grid>
             
