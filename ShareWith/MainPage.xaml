@@ -51,13 +51,26 @@
 
         <controls:ImageButton x:Name="btnDiscovery"  Grid.Row="1" 
                               Height="200" Width="200"
-                              Margin="0,-100,0,0"
+                              Margin="0,-300,0,0"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               NormalStateImageSource="Assets/btn_share.png"
                               PressedStateImageSource="Assets/btn_share_p.png"
                               RecyclePressedStateImageForHover="True"
                               Click="btnDiscovery_Click" />
         
+        <controls:ImageButton x:Name="btnConnect"  Grid.Row="1" 
+                              Height="200" Width="200"
+                              Margin="583,338,583,10"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              NormalStateImageSource="Assets/btn_android.png"
+                              PressedStateImageSource="Assets/btn_android_p.png"                                 RecyclePressedStateImageForHover="True"
+                              Click="btnConnect_Click" />
+
+        <ComboBox x:Name="comboDeviceList"  Grid.Row="1" 
+                  DisplayMemberPath="{Binding Name}"
+                  HorizontalAlignment="Left" Margin="100,30,0,0"
+                  VerticalAlignment="Top" Width="300"/>
+
         <Grid Grid.Row="2" >
             <TextBlock x:Name="txtMessage" Margin="20, 10, 20, 10" 
                        TextWrapping="Wrap" 

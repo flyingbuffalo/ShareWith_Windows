@@ -53,6 +53,10 @@ namespace ShareWith
         {
             get { return txtMessage; }
         }
+        public ComboBox ComboDeviceList
+        {
+            get { return comboDeviceList; }
+        }
 
         public MainPage()
         {
@@ -79,6 +83,13 @@ namespace ShareWith
             manager.getDevicesAsync();
             txtMessage.Text = "Finding Devices...";
         }
+
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        {
+            device = ComboDeviceList.SelectedItem as WFDDevice;
+            txtMessage.Text = "Connect to " + device.Name;
+            manager.pairAsync(device);
+        }
     }
 
 
@@ -93,7 +104,7 @@ namespace ShareWith
         public async void onDevicesDiscovered(List<WFDDevice> deviceList)
         {
             ObservableCollection<WFDDevice> devList = new ObservableCollection<WFDDevice>(deviceList);
-           // parent.comboDeviceList.ItemsSource = devList;
+            parent.ComboDeviceList.ItemsSource = devList;
 
             if (deviceList.Count != 0)
             {
@@ -101,7 +112,7 @@ namespace ShareWith
                 {
                     Debug.WriteLine(dev.Name);
                 }
-                //parent.comboDeviceList.SelectedIndex = 0;
+                parent.ComboDeviceList.SelectedIndex = 0;
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
             }
             else
