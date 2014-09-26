@@ -1,11 +1,14 @@
 ﻿using ShareWith.Common;
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,8 +25,9 @@ using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.System.Threading;
 using System.Diagnostics;
-using WinRTXamlToolkit.Controls;
 using Buffalo.WiFiDirect;
+using WinRTXamlToolkit.Controls;
+
 
 // 기본 페이지 항목 템플릿에 대한 설명은 http://go.microsoft.com/fwlink/?LinkId=234237에 나와 있습니다.
 
@@ -45,7 +49,7 @@ namespace ShareWith
         }
 
         private WFDManager manager;
-        internal WFDDevice nowDevice;
+        internal WFDDevice selectedDevice;
         internal WFDPairInfo pairInfo;
         internal List<WFDDevice> devList = new List<WFDDevice>();
 
@@ -84,33 +88,36 @@ namespace ShareWith
             //this.Frame.Navigate(typeof(DeviceListTestPage));
         }
 
-        private void deviceButton_Click(object sender, RoutedEventArgs e)
+        private async void deviceButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is ImageButton)
             {
                 ImageButton deviceBtn = sender as ImageButton;
-                nowDevice = devList[(int)deviceBtn.Tag];
+                selectedDevice = devList[(int)deviceBtn.Tag];
 
-                txtMessage.Text = "Connect to " + nowDevice.Name;
-                manager.pairAsync(nowDevice);
+                txtMessage.Text = "Connect to " + selectedDevice.Name;
+               // manager.pairAsync(selectedDevice);
             }
+
+            StorageFile file = await FileChooser();
         }
 
         /* private void deviceButton_Click(object sender, RoutedEventArgs e)
-        {
+        {   // progress bar
             //progress circle test code
             startProgress();
 
+            //make thread <3
             System.Threading.Tasks.Task.Run(async () =>
             {
-                for (int i = 0; i <= 500; i++)
+                for (int i = 0; i <=  (올림)filesize/buffersize; i++)
                 {
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                     {
-                        setProgressValue(i / 5.0);
+                        setProgressValue( i / 올림(filesize/buffersize) * 100);
                     });
 
-                    await System.Threading.Tasks.Task.Delay(5);
+                   // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
                 }
             });
         }*/
@@ -146,11 +153,11 @@ namespace ShareWith
 
         public void onDevicesDiscoverFailed(int reasonCode)
         {
-
+            
         }
 
 
-        //connceted
+        //connceted(device-paring)
         public void onDeviceConnected(WFDPairInfo pair)
         {
             parent.pairInfo = pair;
@@ -163,7 +170,8 @@ namespace ShareWith
 
         public void onDeviceConnectFailed(int reasonCode)
         {
-
+            Debug.WriteLine("connection failed by reasoncode=" + reasonCode);
+            parent.TxtMessage.Text = ("connection failed by reasoncode=" + reasonCode);
         }
 
         public void onDeviceDisconnected()
@@ -171,10 +179,10 @@ namespace ShareWith
 
         }
 
-        public void onSocketConnected(StreamSocket s)
+        public async void onSocketConnected(StreamSocket s)
         {
-            parent.TxtMessage.Text = "Socket Connected.";
-
+            parent.TxtMessage.Text = "Connected.";
+            /*
             DataWriter writer = new DataWriter(s.OutputStream);
             writer.WriteString("ping~ping~\n");
 
@@ -186,6 +194,10 @@ namespace ShareWith
             //    s.Dispose();
 
             // parent.manager.unpair(parent.pairInfo);
+            */
+
+            StorageFile file = await parent.FileChooser();
+            await parent.SendFileToPeerAsync(s, file);
         }
     }   
 

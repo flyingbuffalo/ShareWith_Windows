@@ -9,7 +9,8 @@
     xmlns:controls="using:WinRTXamlToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" >
+    mc:Ignorable="d"
+    Loaded="pageRoot_Loaded">
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
@@ -128,7 +129,7 @@
 
 
             <TextBlock x:Name="tbDeviceName" Visibility="Collapsed"
-                       Text="Android4" FontSize="30"
+                       Text="Android4" FontSize="25"
                        Width="240" Height="40" Foreground="#999999"
                        TextAlignment="Center" />
 

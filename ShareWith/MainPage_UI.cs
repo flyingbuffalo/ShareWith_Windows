@@ -13,14 +13,12 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using WinRTXamlToolkit.Controls;
 using Buffalo.WiFiDirect;
-
-using Windows.UI.Xaml.Markup;
-
 using Windows.Devices.WiFiDirect;
 using Windows.Devices.Enumeration;
 using Windows.Networking.Proximity;
@@ -122,7 +120,6 @@ namespace ShareWith
             Canvas.SetLeft(imgProgressDone, _canvasWidth / 2 - 85);
             Canvas.SetTop(imgProgressDone, _canvasHeight / 2 - 85);
             
-            DrawDeviceList(devList);
         }
 
         private void deviceButton_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -220,6 +217,11 @@ namespace ShareWith
             tbProgressPersent.Visibility = Visibility.Collapsed;
 
             imgProgressDone.Visibility = Visibility.Visible;
+
+
+            //파일 전송 또는 수신 완료 후에 처리할 코드
+            //ex) 소켓끊기, 페어링끊기, 페이지리로드or재배치 등등등
+ 
         }
     }
 }
