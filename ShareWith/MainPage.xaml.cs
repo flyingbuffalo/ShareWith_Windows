@@ -22,6 +22,7 @@ using Windows.Networking;
 using Windows.Networking.Sockets;
 using Windows.System.Threading;
 using System.Diagnostics;
+using WinRTXamlToolkit.Controls;
 using Buffalo.WiFiDirect;
 
 // 기본 페이지 항목 템플릿에 대한 설명은 http://go.microsoft.com/fwlink/?LinkId=234237에 나와 있습니다.
@@ -44,18 +45,15 @@ namespace ShareWith
         }
 
         private WFDManager manager;
-        WFDDevice device;
+        internal WFDDevice nowDevice;
         internal WFDPairInfo pairInfo;
+        internal List<WFDDevice> devList = new List<WFDDevice>();
 
         DiscoveredListener discoveredListener = null;
 
         public TextBlock TxtMessage
         {
             get { return txtMessage; }
-        }
-        public ComboBox ComboDeviceList
-        {
-            get { return comboDeviceList; }
         }
 
         public MainPage()
@@ -86,12 +84,36 @@ namespace ShareWith
             //this.Frame.Navigate(typeof(DeviceListTestPage));
         }
 
-        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        private void deviceButton_Click(object sender, RoutedEventArgs e)
         {
-            device = ComboDeviceList.SelectedItem as WFDDevice;
-            txtMessage.Text = "Connect to " + device.Name;
-            manager.pairAsync(device);
+            if (sender is ImageButton)
+            {
+                ImageButton deviceBtn = sender as ImageButton;
+                nowDevice = devList[(int)deviceBtn.Tag];
+
+                txtMessage.Text = "Connect to " + nowDevice.Name;
+                manager.pairAsync(nowDevice);
+            }
         }
+
+        /* private void deviceButton_Click(object sender, RoutedEventArgs e)
+        {
+            //progress circle test code
+            startProgress();
+
+            System.Threading.Tasks.Task.Run(async () =>
+            {
+                for (int i = 0; i <= 500; i++)
+                {
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+                        setProgressValue(i / 5.0);
+                    });
+
+                    await System.Threading.Tasks.Task.Delay(5);
+                }
+            });
+        }*/
     }
 
 
@@ -105,8 +127,7 @@ namespace ShareWith
 
         public async void onDevicesDiscovered(List<WFDDevice> deviceList)
         {
-            ObservableCollection<WFDDevice> devList = new ObservableCollection<WFDDevice>(deviceList);
-            parent.ComboDeviceList.ItemsSource = devList;
+            parent.devList = deviceList;
 
             if (deviceList.Count != 0)
             {
@@ -114,7 +135,7 @@ namespace ShareWith
                 {
                     Debug.WriteLine(dev.Name);
                 }
-                parent.ComboDeviceList.SelectedIndex = 0;
+                parent.DrawDeviceList(deviceList);
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
             }
             else
@@ -167,5 +188,8 @@ namespace ShareWith
             // parent.manager.unpair(parent.pairInfo);
         }
     }   
+
+
+
 
 }

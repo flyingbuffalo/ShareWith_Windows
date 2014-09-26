@@ -62,27 +62,85 @@
                        VerticalAlignment="Bottom" Margin="0,0,30,42"/>
         </Grid>
 
-        <controls:ImageButton x:Name="btnDiscovery"  Grid.Row="1" 
-                              Height="200" Width="200"
-                              Margin="0,-300,0,0"
+        <controls:ImageButton x:Name="btnDiscovery"  Grid.Row="1"  Grid.RowSpan="2"
+                              Height="200" Width="200" Tag="-10"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               NormalStateImageSource="Assets/btn_share.png"
                               PressedStateImageSource="Assets/btn_share_p.png"
                               RecyclePressedStateImageForHover="True"
                               Click="btnDiscovery_Click" />
 
-        <controls:ImageButton x:Name="btnConnect"  Grid.Row="1" 
-                              Height="200" Width="200"
-                              Margin="583,338,583,10"
-                              HorizontalAlignment="Center" VerticalAlignment="Center"
-                              NormalStateImageSource="Assets/btn_android.png"
-                              PressedStateImageSource="Assets/btn_android_p.png"                                 RecyclePressedStateImageForHover="True"
-                              Click="btnConnect_Click" />
+        <Canvas Grid.Row="1" Grid.RowSpan="2" x:Name="canvasGrid">
+            <Canvas.Resources>
+                <controls:ImageButton x:Name="resBtnAndroid"
+                                      Height="200" Width="200"
+                                      NormalStateImageSource="Assets/btn_w_android.png"
+                                      PressedStateImageSource="Assets/btn_w_android_p.png"
+                                      RecyclePressedStateImageForHover="True" />
+                <controls:ImageButton x:Name="resBtnComputer"
+                                      Height="200" Width="200"
+                                      NormalStateImageSource="Assets/btn_w_com.png"
+                                      PressedStateImageSource="Assets/btn_w_com_p.png"
+                                      RecyclePressedStateImageForHover="True"
+                                      PointerEntered="deviceButton_PointerEntered"
+                                      PointerExited="deviceButton_PointerExited"
+                                      Click="deviceButton_Click"/>
 
-        <ComboBox x:Name="comboDeviceList"  Grid.Row="1" 
-                  DisplayMemberPath="{Binding Name}"
-                  HorizontalAlignment="Left" Margin="100,30,0,0"
-                  VerticalAlignment="Top" Width="300"/>
+                <Style x:Key="styleBtnAndroid" TargetType="controls:ImageButton" >
+                    <Setter Property="Height" Value="200" />
+                    <Setter Property="Width" Value="200" />
+                    <Setter Property="NormalStateImageSource" Value="Assets/btn_w_android.png" />
+                    <Setter Property="PressedStateImageSource" Value="Assets/btn_w_android_p.png" />
+                    <Setter Property="RecyclePressedStateImageForHover" Value="True" />
+                </Style>
+                <Style x:Key="styleBtnComputer" TargetType="controls:ImageButton" >
+                    <Setter Property="Height" Value="200" />
+                    <Setter Property="Width" Value="200" />
+                    <Setter Property="NormalStateImageSource" Value="Assets/btn_w_com.png" />
+                    <Setter Property="PressedStateImageSource" Value="Assets/btn_w_com_p.png" />
+                    <Setter Property="RecyclePressedStateImageForHover" Value="True" />
+                </Style>
+                <Style x:Key="styleCircleBackgroundImage" TargetType="Image">
+                    <Setter Property="Source" Value="Assets/devices_list_circle.png" />
+                </Style>
+                <Style x:Key="styleProgressPath" TargetType="Path">
+                    <Setter Property="Stroke" Value="#a8e5de" />
+                    <Setter Property="StrokeThickness" Value="25" />
+                    <Setter Property="StrokeStartLineCap" Value="Round" />
+                    <Setter Property="StrokeEndLineCap" Value="Round" />
+                </Style>
+
+            </Canvas.Resources>
+
+            <Image x:Name="imgDeviceCircle" Visibility="Collapsed"
+                   Source="Assets/devices_list_circle.png" />
+
+            <Image x:Name="progressBackground" Visibility="Collapsed"
+                   Source="Assets/progress_sharing_background.png" />
+
+            <!--Data="M0,-100 A100,100 0 0 1 70.7,-70.7"-->
+            <Path x:Name="progressForegroundPath" Visibility="Collapsed"
+                  Stroke="#a8e5de" StrokeThickness="25"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Canvas.Left="190" Canvas.Top="190"
+                  Data="M0,-155 A155,155 0 0 1 77.5,134.234"    
+                   />
+
+
+            <TextBlock x:Name="tbDeviceName" Visibility="Collapsed"
+                       Text="Android4" FontSize="30"
+                       Width="240" Height="40" Foreground="#999999"
+                       TextAlignment="Center" />
+
+            <TextBlock x:Name="tbProgressPersent" Visibility="Collapsed"
+                       Text="100%" FontSize="80"
+                       Width="240" Height="90" Foreground="#999999"
+                       TextAlignment="Center" />
+
+            <Image x:Name="imgProgressDone" Visibility="Collapsed"
+                   Source="Assets/check_sharing_done.png" />
+
+        </Canvas>
 
         <Grid Grid.Row="2" >
             <TextBlock x:Name="txtMessage" Margin="20, 10, 20, 10" 
