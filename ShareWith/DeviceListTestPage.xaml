@@ -9,11 +9,12 @@
     xmlns:controls="using:WinRTXamlToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="pageRoot_Loaded">
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">My Application</x:String>
+        <x:String x:Key="AppName">ShareWith</x:String>
     </Page.Resources>
 
     <!--
@@ -21,7 +22,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="#f2f2f2">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -43,9 +44,11 @@
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
+                        AutomationProperties.ItemType="Navigation Button"
+                    Foreground="#999999" />
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"
+                       Foreground="#999999" />
         </Grid>
         
         <Canvas Grid.Row="1" Grid.RowSpan="2" x:Name="canvasGrid">
@@ -59,8 +62,11 @@
                                       Height="200" Width="200"
                                       NormalStateImageSource="Assets/btn_w_com.png"
                                       PressedStateImageSource="Assets/btn_w_com_p.png"
-                                      RecyclePressedStateImageForHover="True" />
-
+                                      RecyclePressedStateImageForHover="True"
+                                      PointerEntered="deviceButton_PointerEntered"
+                                      PointerExited="deviceButton_PointerExited"
+                                      Click="deviceButton_Click"/>
+                
                 <Style x:Key="styleBtnAndroid" TargetType="controls:ImageButton" >
                     <Setter Property="Height" Value="200" />
                     <Setter Property="Width" Value="200" />
@@ -75,8 +81,45 @@
                     <Setter Property="PressedStateImageSource" Value="Assets/btn_w_com_p.png" />
                     <Setter Property="RecyclePressedStateImageForHover" Value="True" />
                 </Style>
+                <Style x:Key="styleCircleBackgroundImage" TargetType="Image">
+                    <Setter Property="Source" Value="Assets/devices_list_circle.png" />
+                </Style>
+                <Style x:Key="styleProgressPath" TargetType="Path">
+                    <Setter Property="Stroke" Value="#a8e5de" />
+                    <Setter Property="StrokeThickness" Value="25" />
+                    <Setter Property="StrokeStartLineCap" Value="Round" />
+                    <Setter Property="StrokeEndLineCap" Value="Round" />
+                </Style>
                 
             </Canvas.Resources>
+            
+            <Image x:Name="imgDeviceCircle" Visibility="Collapsed"
+                   Source="Assets/devices_list_circle.png" />
+
+            <Image x:Name="progressBackground" Visibility="Collapsed"
+                   Source="Assets/progress_sharing_background.png" />
+
+            <!--Data="M0,-100 A100,100 0 0 1 70.7,-70.7"-->
+            <Path x:Name="progressForegroundPath" Visibility="Collapsed"
+                  Stroke="#a8e5de" StrokeThickness="25"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                  Canvas.Left="190" Canvas.Top="190"
+                  Data="M0,-155 A155,155 0 0 1 77.5,134.234"    
+                   />
+
+
+            <TextBlock x:Name="tbDeviceName" Visibility="Collapsed"
+                       Text="Android4" FontSize="30"
+                       Width="240" Height="40" Foreground="#999999"
+                       TextAlignment="Center" />
+
+            <TextBlock x:Name="tbProgressPersent" Visibility="Collapsed"
+                       Text="100%" FontSize="80"
+                       Width="240" Height="90" Foreground="#999999"
+                       TextAlignment="Center" />
+
+            <Image x:Name="imgProgressDone" Visibility="Collapsed"
+                   Source="Assets/check_sharing_done.png" />
 
         </Canvas>        
     </Grid>

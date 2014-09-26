@@ -82,6 +82,8 @@ namespace ShareWith
         {
             manager.getDevicesAsync();
             txtMessage.Text = "Finding Devices...";
+
+            //this.Frame.Navigate(typeof(DeviceListTestPage));
         }
 
         private void btnConnect_Click(object sender, RoutedEventArgs e)
