@@ -213,7 +213,8 @@ namespace ShareWith
 
         private void onProgressDone()
         {
-            tbProgressPersent.Text = "";
+            Debug.WriteLine("onProgressDone");
+
             tbProgressPersent.Visibility = Visibility.Collapsed;
 
             imgProgressDone.Visibility = Visibility.Visible;

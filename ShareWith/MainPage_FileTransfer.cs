@@ -51,17 +51,15 @@ namespace ShareWith
                     var rlen = await fileStream.ReadAsync(buff, 0, buff.Length);
                     dw.WriteBytes(buff);
                 }
-
                 await dw.FlushAsync();
                 await dw.StoreAsync();
-
                 await socket.OutputStream.FlushAsync();
             }
         }
 
 
 
-        internal async Task<string> ReceiveFileFomPeer(StreamSocket socket, StorageFolder folder, string outputFilename = null)
+        internal async Task<string> ReceiveFileFromPeer(StreamSocket socket, StorageFolder folder, string outputFilename = null)
         {
             StorageFile file;
             using (var rw = new DataReader(socket.InputStream))
@@ -83,7 +81,6 @@ namespace ShareWith
                 // 4. Reading file
                 using (var memStream = await DownloadFile(rw, fileLength))
                 {
-
                     file = await folder.CreateFileAsync(outputFilename, CreationCollisionOption.ReplaceExisting);
                     using (var fileStream1 = await file.OpenAsync(FileAccessMode.ReadWrite))
                     {
