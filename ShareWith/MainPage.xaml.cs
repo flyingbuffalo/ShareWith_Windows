@@ -11,6 +11,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.Foundation.Collections;
+using Windows.Storage.FileProperties;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -69,7 +70,7 @@ namespace ShareWith
 
             discoveredListener = new DiscoveredListener(this);
             manager = new WFDManager(this, discoveredListener, discoveredListener);
-            
+                       
         }
 
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
@@ -96,10 +97,8 @@ namespace ShareWith
                 selectedDevice = devList[(int)deviceBtn.Tag];
 
                 txtMessage.Text = "Connect to " + selectedDevice.Name;
-               // manager.pairAsync(selectedDevice);
-            }
-
-            StorageFile file = await FileChooser();
+                manager.pairAsync(selectedDevice);
+            }       
         }
 
         /* private void deviceButton_Click(object sender, RoutedEventArgs e)
@@ -195,9 +194,34 @@ namespace ShareWith
 
             // parent.manager.unpair(parent.pairInfo);
             */
+            int BLOCK_SIZE = 1024;
 
             StorageFile file = await parent.FileChooser();
+
+            Debug.WriteLine("FileChooser");
+            BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
+            double fileSize = Convert.ToDouble(fileProperty.Size);
+        //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
             await parent.SendFileToPeerAsync(s, file);
+
+            if (fileProperty.Size != 0)
+            {
+                await System.Threading.Tasks.Task.Run(async () =>
+                {
+                    for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
+                    {
+                        await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        {
+                            parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
+                        });
+                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
+                    }
+                });
+            }
+            else
+            {
+                throw new FileNotFoundException("[Exception] : File is null.");
+            }   
         }
     }   
 
