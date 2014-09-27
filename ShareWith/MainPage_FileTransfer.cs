@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.Foundation.Collections;
@@ -25,6 +26,9 @@ using Windows.Networking.Sockets;
 using Windows.System.Threading;
 using System.Diagnostics;
 using Buffalo.WiFiDirect;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.Storage.Pickers;
 
 namespace ShareWith
 {
@@ -125,6 +129,29 @@ namespace ShareWith
             }
             else 
             {
+                throw new FileNotFoundException("없지로오옹~ > <");
+            }
+        }
+
+        internal async Task<StorageFolder> FileSave()
+        {
+            // Clear previous returned folder name, if it exists, between iterations of this scenario
+            FolderPicker folderPicker = new FolderPicker();
+            folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add(".docx");
+            folderPicker.FileTypeFilter.Add(".xlsx");
+            folderPicker.FileTypeFilter.Add(".pptx");
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                // Application now has read/write access to all contents in the picked folder (including other sub-folder contents)
+                StorageApplicationPermissions.FutureAccessList.AddOrReplace("PickedFolderToken", folder);
+                Debug.WriteLine("Picked folder: " + folder.Name);
+                return folder;
+            }
+            else
+            {
+                Debug.WriteLine("Operation cancelled.");
                 throw new FileNotFoundException("없지로오옹~ > <");
             }
         }
