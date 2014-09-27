@@ -147,6 +147,11 @@ namespace ShareWith
                 }
                 parent.DrawDeviceList(deviceList);
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
+                //File Send
+                file = await parent.FileChooser();
+                Debug.WriteLine("FileChooser");
+                //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
+
             }
             else
             {
@@ -168,12 +173,12 @@ namespace ShareWith
             Debug.WriteLine("MainPage : paring");
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
 
-
+            /*
             //File Send
             file = await parent.FileChooser();
             Debug.WriteLine("FileChooser");
             //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
-
+            */
             pair.connectSocketAsync(this);
         }
 
@@ -276,7 +281,7 @@ namespace ShareWith
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             double fileSize = Convert.ToDouble(fileProperty.Size);
             Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
-            await parent.SendFileToPeerAsync(s, file);
+         //   await parent.SendFileToPeerAsync(s, file);
 
             if (fileProperty.Size != 0)
             {
@@ -284,6 +289,7 @@ namespace ShareWith
 
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
+                    await parent.SendFileToPeerAsync(s, file);
                     for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
                     {
                         await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
