@@ -161,7 +161,7 @@ namespace ShareWith
         {
             parent.pairInfo = pair;
 
-            Debug.WriteLine("paring");
+            Debug.WriteLine("MainPage : paring");
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
 
             pair.connectSocketAsync(this);
@@ -191,13 +191,14 @@ namespace ShareWith
             parent.TxtMessage.Text = "Send Message.";
             //   writer.Dispose();
             //    s.Dispose();
-
+            
             // parent.manager.unpair(parent.pairInfo);
             */
+
+            //File Send
             int BLOCK_SIZE = 1024;
 
             StorageFile file = await parent.FileChooser();
-
             Debug.WriteLine("FileChooser");
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             double fileSize = Convert.ToDouble(fileProperty.Size);
@@ -206,6 +207,8 @@ namespace ShareWith
 
             if (fileProperty.Size != 0)
             {
+                parent.startProgress();
+
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
                     for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
