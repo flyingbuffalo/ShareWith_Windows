@@ -126,6 +126,9 @@ namespace ShareWith
     public class DiscoveredListener : WFDDeviceDiscoveredListener, WFDDeviceConnectedListener, WFDPairInfo.PairSocketConnectedListener
     {
         MainPage parent;
+        int BLOCK_SIZE = 1024;
+        StorageFile file ;
+
         public DiscoveredListener(MainPage parent)
         {
             this.parent = parent;
@@ -157,12 +160,18 @@ namespace ShareWith
 
 
         //connceted(device-paring)
-        public void onDeviceConnected(WFDPairInfo pair)
+        public async void onDeviceConnected(WFDPairInfo pair)
         {
             parent.pairInfo = pair;
 
             Debug.WriteLine("MainPage : paring");
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
+
+
+            //File Send
+            file = await parent.FileChooser();
+            Debug.WriteLine("FileChooser");
+            //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
 
             pair.connectSocketAsync(this);
         }
@@ -200,7 +209,7 @@ namespace ShareWith
             
             // parent.manager.unpair(parent.pairInfo);
             */
-
+ /*
             //File Send
             int BLOCK_SIZE = 1024;
 
@@ -208,9 +217,37 @@ namespace ShareWith
             Debug.WriteLine("FileChooser");
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             double fileSize = Convert.ToDouble(fileProperty.Size);
+
+            Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
         //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
             await parent.SendFileToPeerAsync(s, file);
 
+            if (fileProperty.Size != 0)
+            {
+                parent.startProgress();
+
+                await System.Threading.Tasks.Task.Run(async () =>
+                {
+                    for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
+                    {
+                        await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        {
+                            parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
+                        });
+                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
+                    }
+                });
+            }
+            else
+            {
+                throw new FileNotFoundException("[Exception] : File is null.");
+            }   
+*/
+            BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
+            double fileSize = Convert.ToDouble(fileProperty.Size);
+            Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
+
+            await parent.SendFileToPeerAsync(s, file);
             if (fileProperty.Size != 0)
             {
                 parent.startProgress();
