@@ -175,7 +175,13 @@ namespace ShareWith
 
         public void onDeviceDisconnected()
         {
+                
+        }
 
+        public void onSocketReceived(StreamSocket s)
+        {
+            Debug.WriteLine("RECEIVEDD ");
+            //received
         }
 
         public async void onSocketConnected(StreamSocket s)
@@ -223,6 +229,8 @@ namespace ShareWith
                 throw new FileNotFoundException("[Exception] : File is null.");
             }   
         }
+
+        
     }   
 
 
