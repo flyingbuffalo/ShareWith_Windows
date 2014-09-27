@@ -69,7 +69,7 @@ namespace ShareWith
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
             discoveredListener = new DiscoveredListener(this);
-            manager = new WFDManager(this, discoveredListener, discoveredListener);
+            manager = new WFDManager(this, discoveredListener, discoveredListener, discoveredListener);
                        
         }
 
