@@ -185,16 +185,14 @@ namespace ShareWith
         }
 
         public async void onSocketReceived(StreamSocket s)
-        {
-           BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
-           double fileSize = Convert.ToDouble(fileProperty.Size);
-             
+        {    
             Debug.WriteLine("RECEIVEDD ");
             StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
 
             await parent.ReceiveFileFromPeer(s, folder);
-
+            
+            /*
             if (fileProperty.Size != 0)
             {
                 parent.startProgress();
@@ -215,7 +213,7 @@ namespace ShareWith
             {
                 throw new FileNotFoundException("[Exception] : File is null.");
             }   
-            
+            */
             //received
         }
 
