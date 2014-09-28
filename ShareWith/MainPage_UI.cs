@@ -139,6 +139,8 @@ namespace ShareWith
 
         public void startProgress()
         {
+            btnDiscovery.Visibility = Visibility.Collapsed; 
+
             tbDeviceName.Text = "";
             tbDeviceName.Visibility = Visibility.Collapsed;
             imgDeviceCircle.Visibility = Visibility.Collapsed;
