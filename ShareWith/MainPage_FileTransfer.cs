@@ -141,6 +141,63 @@ namespace ShareWith
             return memStream;
         }
 
+        internal async Task<string> RecieveFileFromPeerAsync(StreamSocket socket, StorageFolder folder)
+        {
+            StorageFile file = null;
+            //byte[] buff = new byte[BLOCK_SIZE];
+
+            using (var rw = new DataReader(socket.InputStream))
+            {
+                // 1. Read the filename length
+                await rw.LoadAsync(sizeof(Int32));
+                var filenameLength = (uint)rw.ReadInt32();
+
+                // 2. Read the filename
+                await rw.LoadAsync(filenameLength);
+                var originalFilename = rw.ReadString(filenameLength);
+
+                //3. Read the file length
+                await rw.LoadAsync(sizeof(UInt64));
+                var fileLength = rw.ReadUInt64();
+
+                // 4. Reading file
+                ulong fileSize = 0L, receivedSize = 0L;
+ 
+                startProgress();
+
+                file = await folder.CreateFileAsync(originalFilename, CreationCollisionOption.ReplaceExisting);
+                // Download the file
+                using (DataReader dataReader = new DataReader(socket.InputStream))
+                {
+                    byte[] buffer;
+
+                    //using (var fileStream = await file.OpenStreamForWriteAsync()) await file.OpenAsync(FileAccessMode.ReadWrite)
+                    using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        while(receivedSize < fileSize)
+                        {
+                            var lenToRead = Math.Min(BLOCK_SIZE, (float)(fileLength - receivedSize));
+                            await rw.LoadAsync((uint)lenToRead);
+                            var tempBuff = rw.ReadBuffer((uint)lenToRead);
+                            await fileStream.WriteAsync(tempBuff);
+                            receivedSize += (ulong)lenToRead;
+
+                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                            {
+                                setProgressValue(receivedSize / (double)fileSize * 100);
+                            });
+                            await Task.Delay(100);
+                        }
+                        fileStream.Dispose();
+                    }
+
+                    dataReader.Dispose();
+                }
+
+            }
+            return file.Path;
+        }
+
         internal async Task<StorageFile> FileChooser()
         { 
 

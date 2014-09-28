@@ -190,7 +190,7 @@ namespace ShareWith
             StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
 
-            await parent.ReceiveFileFromPeer(s, folder);
+            await parent.RecieveFileFromPeerAsync(s, folder);
         }
 
         public async void onSocketConnected(StreamSocket s)
