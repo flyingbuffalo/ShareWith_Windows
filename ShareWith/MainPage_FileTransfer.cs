@@ -32,7 +32,7 @@ namespace ShareWith
 {
     public sealed partial class MainPage : Page 
     {    
-        int BLOCK_SIZE = 1024;
+        int BLOCK_SIZE = 1024 * 1024;
 
         internal async Task SendFileToPeerAsync(StreamSocket socket, StorageFile selectedFile)
         {
@@ -62,6 +62,7 @@ namespace ShareWith
                 {
                     var rlen = await fileStream.ReadAsync(buff, 0, buff.Length);
                     dw.WriteBytes(buff);
+                    await dw.FlushAsync();
 
                     sentSize += (ulong)rlen;
 
@@ -71,7 +72,6 @@ namespace ShareWith
                     });
                 }
 
-                await dw.FlushAsync();
                 await dw.StoreAsync();
                 await socket.OutputStream.FlushAsync();
 
@@ -117,6 +117,8 @@ namespace ShareWith
         {
             ulong fileSize = 0L, receivedSize = 0L;
             var memStream = new InMemoryRandomAccessStream();
+
+            startProgress();
 
             // Download the file
             while (memStream.Position < fileLength)
