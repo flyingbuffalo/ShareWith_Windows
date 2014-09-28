@@ -165,34 +165,38 @@ namespace ShareWith
  
                 startProgress();
 
+                Debug.WriteLine("create file");
                 file = await folder.CreateFileAsync(originalFilename, CreationCollisionOption.ReplaceExisting);
                 // Download the file
-                using (DataReader dataReader = new DataReader(socket.InputStream))
+                byte[] buffer;
+
+                //using (var fileStream = await file.OpenStreamForWriteAsync()) await file.OpenAsync(FileAccessMode.ReadWrite)
+                Debug.WriteLine("open file Stream");
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    byte[] buffer;
+                    Debug.WriteLine("endof open file Stream");
 
-                    //using (var fileStream = await file.OpenStreamForWriteAsync()) await file.OpenAsync(FileAccessMode.ReadWrite)
-                    using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                    while(receivedSize < fileSize)
                     {
-                        while(receivedSize < fileSize)
+                        var lenToRead = Math.Min(BLOCK_SIZE, (float)(fileLength - receivedSize));
+                        Debug.WriteLine("load aysnc read stream");
+                        await rw.LoadAsync((uint)lenToRead);
+                        Debug.WriteLine("load aysnc read stream");
+                        var tempBuff = rw.ReadBuffer((uint)lenToRead);
+                        Debug.WriteLine("write aysnc file stream");
+                        await fileStream.WriteAsync(tempBuff);
+                        Debug.WriteLine("1 thread done");
+                        receivedSize += (ulong)lenToRead;
+
+                        await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                         {
-                            var lenToRead = Math.Min(BLOCK_SIZE, (float)(fileLength - receivedSize));
-                            await rw.LoadAsync((uint)lenToRead);
-                            var tempBuff = rw.ReadBuffer((uint)lenToRead);
-                            await fileStream.WriteAsync(tempBuff);
-                            receivedSize += (ulong)lenToRead;
-
-                            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                            {
-                                setProgressValue(receivedSize / (double)fileSize * 100);
-                            });
-                            await Task.Delay(100);
-                        }
-                        fileStream.Dispose();
+                            setProgressValue(receivedSize / (double)fileSize * 100);
+                        });
+                        await Task.Delay(100);
                     }
-
-                    dataReader.Dispose();
+                    fileStream.Dispose();
                 }
+
 
             }
             return file.Path;
