@@ -26,19 +26,23 @@ using Windows.Networking.Sockets;
 using Windows.System.Threading;
 using System.Diagnostics;
 using Buffalo.WiFiDirect;
-using Windows.Storage;
-using Windows.Storage.AccessCache;
-using Windows.Storage.Pickers;
+
 
 namespace ShareWith
 {
     public sealed partial class MainPage : Page 
     {    
         int BLOCK_SIZE = 1024;
+
         internal async Task SendFileToPeerAsync(StreamSocket socket, StorageFile selectedFile)
         {
+            ulong fileSize = 0L, sentSize = 0L;
+
             byte[] buff = new byte[BLOCK_SIZE];
             var prop = await selectedFile.GetBasicPropertiesAsync();
+
+            startProgress();
+
             using (var dw = new DataWriter(socket.OutputStream))
             {
 
@@ -50,22 +54,35 @@ namespace ShareWith
                 dw.WriteUInt64(prop.Size);
                 // 4. Send the file
                 var fileStream = await selectedFile.OpenStreamForReadAsync();
+
+                fileSize = prop.Size;
+                Debug.WriteLine("onSocketConnected fileSize :" + prop.Size);
+
                 while (fileStream.Position < (long)prop.Size)
                 {
                     var rlen = await fileStream.ReadAsync(buff, 0, buff.Length);
                     dw.WriteBytes(buff);
+
+                    sentSize += (ulong)rlen;
+
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+                        setProgressValue(sentSize/(double)fileSize * 100);
+                    });
                 }
+
                 await dw.FlushAsync();
                 await dw.StoreAsync();
                 await socket.OutputStream.FlushAsync();
+
+                setProgressValue(100);
             }
         }
-
-
 
         internal async Task<string> ReceiveFileFromPeer(StreamSocket socket, StorageFolder folder, string outputFilename = null)
         {
             StorageFile file;
+
             using (var rw = new DataReader(socket.InputStream))
             {
                 // 1. Read the filename length
@@ -90,16 +107,18 @@ namespace ShareWith
                     {
                         await RandomAccessStream.CopyAndCloseAsync(memStream.GetInputStreamAt(0), fileStream1.GetOutputStreamAt(0));
                     }
-
                     rw.DetachStream();
                 }
-            }
 
+                setProgressValue(100);
+            
+            }
             return file.Path;
         }
 
         internal async Task<InMemoryRandomAccessStream> DownloadFile(DataReader rw, ulong fileLength)
         {
+            ulong fileSize = 0L, receivedSize = 0L;
             var memStream = new InMemoryRandomAccessStream();
 
             // Download the file
@@ -109,8 +128,14 @@ namespace ShareWith
                 await rw.LoadAsync((uint)lenToRead);
                 var tempBuff = rw.ReadBuffer((uint)lenToRead);
                 await memStream.WriteAsync(tempBuff);
-            }
 
+                receivedSize += (ulong)tempBuff.Length;
+
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                {
+                    setProgressValue(receivedSize / (double)fileSize * 100);
+                });
+            }
             return memStream;
         }
 

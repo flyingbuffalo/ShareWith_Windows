@@ -181,7 +181,7 @@ namespace ShareWith
 
         public void onDeviceDisconnected()
         {
-                
+               
         }
 
         public async void onSocketReceived(StreamSocket s)
@@ -268,37 +268,17 @@ namespace ShareWith
             }   
 */
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
-            double fileSize = Convert.ToDouble(fileProperty.Size);
-            Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
-
-            await parent.SendFileToPeerAsync(s, file);
             if (fileProperty.Size != 0)
             {
-                parent.startProgress();
+                double fileSize = Convert.ToDouble(fileProperty.Size);
+                Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
 
-                await System.Threading.Tasks.Task.Run(async () =>
-                {
-                    await System.Threading.Tasks.Task.Delay(500);
-
-                    for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
-                    {
-                        await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                        {
-                            parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
-                        });
-                    }
-                });
-            }
-            else
+                await parent.SendFileToPeerAsync(s, file);
+            }   
+            else 
             {
                 throw new FileNotFoundException("[Exception] : File is null.");
-            }   
+            }
         }
-
-        
     }   
-
-
-
-
 }
