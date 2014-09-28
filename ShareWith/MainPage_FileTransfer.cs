@@ -108,10 +108,7 @@ namespace ShareWith
                         await RandomAccessStream.CopyAndCloseAsync(memStream.GetInputStreamAt(0), fileStream1.GetOutputStreamAt(0));
                     }
                     rw.DetachStream();
-                }
-
-                setProgressValue(100);
-            
+                }            
             }
             return file.Path;
         }
@@ -136,6 +133,8 @@ namespace ShareWith
                     setProgressValue(receivedSize / (double)fileSize * 100);
                 });
             }
+
+            setProgressValue(100);
             return memStream;
         }
 

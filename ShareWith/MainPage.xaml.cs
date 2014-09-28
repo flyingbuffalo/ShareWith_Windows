@@ -191,30 +191,6 @@ namespace ShareWith
             Debug.WriteLine("FileSave");
 
             await parent.ReceiveFileFromPeer(s, folder);
-            
-            /*
-            if (fileProperty.Size != 0)
-            {
-                parent.startProgress();
-
-                await System.Threading.Tasks.Task.Run(async () =>
-                {
-                    for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
-                    {
-                        await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                        {
-                            parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
-                        });
-                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
-                    }
-                });
-            }
-            else
-            {
-                throw new FileNotFoundException("[Exception] : File is null.");
-            }   
-            */
-            //received
         }
 
         public async void onSocketConnected(StreamSocket s)
