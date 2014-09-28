@@ -146,6 +146,10 @@ namespace ShareWith
                 }
                 parent.DrawDeviceList(deviceList);
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
+
+                //File Choose
+                file = await parent.FileChooser();
+                Debug.WriteLine("FileChooser");
             }
             else
             {
@@ -166,13 +170,6 @@ namespace ShareWith
 
             Debug.WriteLine("MainPage : paring");
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
-
-
-            //File Send
-            file = await parent.FileChooser();
-            Debug.WriteLine("FileChooser");
-            //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
-
             pair.connectSocketAsync(this);
         }
 
@@ -189,9 +186,9 @@ namespace ShareWith
 
         public async void onSocketReceived(StreamSocket s)
         {
-            BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
-            double fileSize = Convert.ToDouble(fileProperty.Size);
-
+           BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
+           double fileSize = Convert.ToDouble(fileProperty.Size);
+             
             Debug.WriteLine("RECEIVEDD ");
             StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
@@ -218,7 +215,7 @@ namespace ShareWith
             {
                 throw new FileNotFoundException("[Exception] : File is null.");
             }   
-
+            
             //received
         }
 
@@ -283,13 +280,14 @@ namespace ShareWith
 
                 await System.Threading.Tasks.Task.Run(async () =>
                 {
+                    await System.Threading.Tasks.Task.Delay(500);
+
                     for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
                     {
                         await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                         {
                             parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
                         });
-                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
                     }
                 });
             }
