@@ -161,7 +161,7 @@ namespace ShareWith
                 var fileLength = rw.ReadUInt64();
 
                 // 4. Reading file
-                ulong fileSize = 0L, receivedSize = 0L;
+                ulong fileSize =  (ulong)fileLength, receivedSize = 0L;
  
                 startProgress();
 
