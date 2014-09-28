@@ -137,6 +137,7 @@ namespace ShareWith
             }
 
             setProgressValue(100);
+
             return memStream;
         }
 
@@ -163,10 +164,11 @@ namespace ShareWith
         {
             // Clear previous returned folder name, if it exists, between iterations of this scenario
             FolderPicker folderPicker = new FolderPicker();
+
+            folderPicker.ViewMode = PickerViewMode.List;
             folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
-            folderPicker.FileTypeFilter.Add(".docx");
-            folderPicker.FileTypeFilter.Add(".xlsx");
-            folderPicker.FileTypeFilter.Add(".pptx");
+            folderPicker.FileTypeFilter.Add("*");
+
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
