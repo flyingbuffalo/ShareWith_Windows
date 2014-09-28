@@ -32,10 +32,8 @@ using Windows.Storage.Pickers;
 
 namespace ShareWith
 {
-    public sealed partial class MainPage : Page
-    {
-        MainPage parent;
-
+    public sealed partial class MainPage : Page 
+    {    
         int BLOCK_SIZE = 1024;
         internal async Task SendFileToPeerAsync(StreamSocket socket, StorageFile selectedFile)
         {
@@ -63,6 +61,8 @@ namespace ShareWith
             }
         }
 
+
+
         internal async Task<string> ReceiveFileFromPeer(StreamSocket socket, StorageFolder folder, string outputFilename = null)
         {
             StorageFile file;
@@ -81,8 +81,7 @@ namespace ShareWith
                 //3. Read the file length
                 await rw.LoadAsync(sizeof(UInt64));
                 var fileLength = rw.ReadUInt64();
-                parent.fileLength = rw.ReadUInt64();
-                
+
                 // 4. Reading file
                 using (var memStream = await DownloadFile(rw, fileLength))
                 {

@@ -36,7 +36,6 @@ namespace ShareWith
 {
     public sealed partial class MainPage : Page
     {
-        internal UInt64 fileLength = 0;
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
@@ -190,17 +189,16 @@ namespace ShareWith
 
         public async void onSocketReceived(StreamSocket s)
         {
+            BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
+            double fileSize = Convert.ToDouble(fileProperty.Size);
+
             Debug.WriteLine("RECEIVEDD ");
             StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
 
             await parent.ReceiveFileFromPeer(s, folder);
-                
-            double fileSize = Convert.ToDouble(parent.fileLength);
-            Debug.WriteLine("   onSocketReceived fileSize :" + parent.fileLength);
-            await parent.SendFileToPeerAsync(s, file);
 
-            if (fileSize != 0)
+            if (fileProperty.Size != 0)
             {
                 parent.startProgress();
 
@@ -212,7 +210,7 @@ namespace ShareWith
                         {
                             parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
                         });
-                         await System.Threading.Tasks.Task.Delay(1000);
+                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
                     }
                 });
             }
@@ -220,6 +218,7 @@ namespace ShareWith
             {
                 throw new FileNotFoundException("[Exception] : File is null.");
             }   
+
             //received
         }
 
@@ -276,8 +275,8 @@ namespace ShareWith
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             double fileSize = Convert.ToDouble(fileProperty.Size);
             Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
-            await parent.SendFileToPeerAsync(s, file);
 
+            await parent.SendFileToPeerAsync(s, file);
             if (fileProperty.Size != 0)
             {
                 parent.startProgress();
@@ -290,7 +289,7 @@ namespace ShareWith
                         {
                             parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
                         });
-                            await System.Threading.Tasks.Task.Delay(1000);
+                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
                     }
                 });
             }
