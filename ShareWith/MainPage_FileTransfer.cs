@@ -36,16 +36,51 @@ namespace ShareWith
 
         internal async Task SendFileToPeerAsync(StreamSocket socket, StorageFile selectedFile)
         {
-            ulong fileSize = 0L, sentSize = 0L;
+            ulong sentSize = 0L;
 
             byte[] buff = new byte[BLOCK_SIZE];
             var prop = await selectedFile.GetBasicPropertiesAsync();
 
             startProgress();
 
+            using (var writer = new StreamWriter((Stream)socket.OutputStream))
+            {
+                // 1. Send the filename length
+                writer.WriteLine(selectedFile.Name.Length);
+                // 2. Send the filename
+                writer.WriteLine(selectedFile.Name);
+                // 3. Send the file length
+                writer.WriteLine(prop.Size);
+                // 4. Send the file
+
+                var fileStream = await selectedFile.OpenStreamForReadAsync();
+
+                //writer.AutoFlush = true;
+
+                var dw = new DataWriter(socket.OutputStream);
+                while (fileStream.Position < (long)prop.Size)
+                {
+                    var rlen = await fileStream.ReadAsync(buff, 0, buff.Length);
+                    dw.WriteBytes(buff);
+                    await dw.FlushAsync();
+
+                    sentSize += (ulong)rlen;
+
+                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                    {
+                        setProgressValue(sentSize / (double)prop.Size * 100);
+                    });
+                }
+
+                await dw.StoreAsync();
+                await socket.OutputStream.FlushAsync();
+
+                setProgressValue(100);
+            }
+            #region fdsa
+            /*
             using (var dw = new DataWriter(socket.OutputStream))
             {
-
                 // 1. Send the filename length
                 dw.WriteInt32(selectedFile.Name.Length); // filename length is fixed
                 // 2. Send the filename
@@ -77,8 +112,12 @@ namespace ShareWith
 
                 setProgressValue(100);
             }
+            */
+            #endregion 
         }
 
+        #region test
+        /*
         internal async Task<string> ReceiveFileFromPeer(StreamSocket socket, StorageFolder folder, string outputFilename = null)
         {
             StorageFile file;
@@ -90,6 +129,7 @@ namespace ShareWith
                 var filenameLength = (uint)rw.ReadInt32();
                 // 2. Read the filename
                 await rw.LoadAsync(filenameLength);
+
                 var originalFilename = rw.ReadString(filenameLength);
                 if (outputFilename == null)
                 {
@@ -110,9 +150,11 @@ namespace ShareWith
                     rw.DetachStream();
                 }            
             }
+             
             return file.Path;
         }
-
+         * */
+        #endregion
         internal async Task<InMemoryRandomAccessStream> DownloadFile(DataReader rw, ulong fileLength)
         {
             ulong fileSize = 0L, receivedSize = 0L;
@@ -124,6 +166,7 @@ namespace ShareWith
             while (memStream.Position < fileLength)
             {
                 var lenToRead = Math.Min(BLOCK_SIZE, (float)(fileLength - memStream.Position));
+
                 await rw.LoadAsync((uint)lenToRead);
                 var tempBuff = rw.ReadBuffer((uint)lenToRead);
                 await memStream.WriteAsync(tempBuff);
@@ -146,6 +189,57 @@ namespace ShareWith
             StorageFile file = null;
             //byte[] buff = new byte[BLOCK_SIZE];
 
+            using (var reader = new StreamReader((Stream)socket.InputStream))
+            {
+                // 1. Read the filename length
+                var filenameLength = await reader.ReadLineAsync();
+
+                // 2. Read the filename
+                var originalFilename = await reader.ReadLineAsync();
+
+                // 3. Read the file size
+                var fileLength = await reader.ReadLineAsync();
+
+                // 4. Read the file
+                ulong fileSize = ulong.Parse(fileLength), receivedSize = 0L;
+                
+                var dr = new DataReader(socket.InputStream);
+
+                startProgress();
+
+                Debug.WriteLine("create file");
+                file = await folder.CreateFileAsync(originalFilename, CreationCollisionOption.ReplaceExisting);
+                // Download the file
+
+                //using (var fileStream = await file.OpenStreamForWriteAsync()) await file.OpenAsync(FileAccessMode.ReadWrite)
+                Debug.WriteLine("open file Stream");
+                using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    Debug.WriteLine("endof open file Stream");
+
+                    while (receivedSize < fileSize)
+                    {
+                        var lenToRead = Math.Min(BLOCK_SIZE, (float)(ulong.Parse(fileLength) - receivedSize));
+                        Debug.WriteLine("load aysnc read stream");
+                        await dr.LoadAsync((uint)lenToRead);
+                        Debug.WriteLine("load aysnc read stream");
+                        var tempBuff = dr.ReadBuffer((uint)lenToRead);
+                        Debug.WriteLine("write aysnc file stream");
+                        await fileStream.WriteAsync(tempBuff);
+                        Debug.WriteLine("1 thread done");
+                        receivedSize += (ulong)lenToRead;
+
+                        await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+                        {
+                            setProgressValue(receivedSize / (double)fileSize * 100);
+                        });
+                        await Task.Delay(100);
+                    }
+                    fileStream.Dispose();
+                }
+            }
+            #region asdf
+            /*
             using (var rw = new DataReader(socket.InputStream))
             {
                 // 1. Read the filename length
@@ -168,7 +262,6 @@ namespace ShareWith
                 Debug.WriteLine("create file");
                 file = await folder.CreateFileAsync(originalFilename, CreationCollisionOption.ReplaceExisting);
                 // Download the file
-                byte[] buffer;
 
                 //using (var fileStream = await file.OpenStreamForWriteAsync()) await file.OpenAsync(FileAccessMode.ReadWrite)
                 Debug.WriteLine("open file Stream");
@@ -198,7 +291,8 @@ namespace ShareWith
                 }
 
 
-            }
+            } */
+            #endregion
             return file.Path;
         }
 
