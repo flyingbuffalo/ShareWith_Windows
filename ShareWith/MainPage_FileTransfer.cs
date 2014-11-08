@@ -55,7 +55,7 @@ namespace ShareWith
 
                 var fileStream = await selectedFile.OpenStreamForReadAsync();
 
-                //writer.AutoFlush = true;
+                writer.AutoFlush = true;
 
                 var dw = new DataWriter(socket.OutputStream);
                 while (fileStream.Position < (long)prop.Size)
@@ -315,7 +315,7 @@ namespace ShareWith
             }
         }
 
-        internal async Task<StorageFolder> FileSave()
+        internal async Task<StorageFolder> folderChooser()
         {
             // Clear previous returned folder name, if it exists, between iterations of this scenario
             FolderPicker folderPicker = new FolderPicker();
