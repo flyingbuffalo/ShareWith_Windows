@@ -43,7 +43,7 @@ namespace ShareWith
 
             startProgress();
 
-            using (var writer = new StreamWriter(socket.OutputStream.AsStreamForWrite()))
+            using (var writer = new StreamWriter((Stream)socket.OutputStream))
             {
                 // 1. Send the filename length
                 writer.WriteLine(selectedFile.Name.Length);
@@ -189,7 +189,7 @@ namespace ShareWith
             StorageFile file = null;
             //byte[] buff = new byte[BLOCK_SIZE];
 
-            using (var reader = new StreamReader(socket.InputStream.AsStreamForRead()))
+            using (var reader = new StreamReader((Stream)socket.InputStream))
             {
                 // 1. Read the filename length
                 var filenameLength = await reader.ReadLineAsync();
