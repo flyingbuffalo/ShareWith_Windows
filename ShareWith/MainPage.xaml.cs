@@ -227,7 +227,7 @@ namespace ShareWith
             }   
         }
 
-        void onSocketReceived(StreamSocket s)
+        public async void onSocketReceived(StreamSocket s)
         {
             
         }
