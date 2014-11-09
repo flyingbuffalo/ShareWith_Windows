@@ -187,7 +187,7 @@ namespace ShareWith
         public async void onSocketReceived(StreamSocket s)
         {    
             Debug.WriteLine("RECEIVEDD ");
-            StorageFolder folder = await parent.folderChooser();
+            StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
 
             await parent.RecieveFileFromPeerAsync(s, folder);
