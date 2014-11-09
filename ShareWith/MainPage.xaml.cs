@@ -69,7 +69,7 @@ namespace ShareWith
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
             discoveredListener = new DiscoveredListener(this);
-            manager = new WFDManager(this, discoveredListener, discoveredListener);
+            new WFDManager(this, discoveredListener, discoveredListener, discoveredListener);
                        
         }
 
@@ -225,6 +225,11 @@ namespace ShareWith
             {
                 throw new FileNotFoundException("[Exception] : File is null.");
             }   
+        }
+
+        void onSocketReceived(StreamSocket s)
+        {
+            
         }
     }   
 
