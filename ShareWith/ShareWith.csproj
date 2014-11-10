@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ShareWith</RootNamespace>
     <AssemblyName>ShareWith</AssemblyName>
-    <DefaultLanguage>ko-KR</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -118,12 +118,16 @@
     <Compile Include="MainPage_FileTransfer.cs" />
     <Compile Include="MainPage_UI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WFDDevice.cs" />
+    <Compile Include="WFDDeviceConnectedListener.cs" />
+    <Compile Include="WFDDeviceDiscoveredListener.cs" />
+    <Compile Include="WFDManager.cs" />
+    <Compile Include="WFDPairInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="ShareWith_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\btn_android.png" />
@@ -167,10 +171,6 @@
     <ProjectReference Include="..\..\..\..\Downloads\WinRT XAML Toolkit - 1.6.1.3 - Source\WinRTXamlToolkit\WinRTXamlToolkit.csproj">
       <Project>{7b7966be-213f-4b84-867d-2a0ccf61245f}</Project>
       <Name>WinRTXamlToolkit</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\WFDWindows\WFDWindows\WFDWindows.csproj">
-      <Project>{3f3c9a3d-d672-43d0-b7d1-12df099a0edb}</Project>
-      <Name>WFDWindows</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
