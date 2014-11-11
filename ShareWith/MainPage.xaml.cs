@@ -103,6 +103,7 @@ namespace ShareWith
                 ImageButton deviceBtn = sender as ImageButton;
                 selectedDevice = devList[(int)deviceBtn.Tag];
 
+                Debug.WriteLine("Connect to " + selectedDevice.Name);
                 txtMessage.Text = "Connect to " + selectedDevice.Name;
                 manager.pairAsync(selectedDevice);
             }       
@@ -151,8 +152,8 @@ namespace ShareWith
         {
             parent.pairInfo = pair;
 
-            parent.isParing = false;
             Debug.WriteLine("MainPage : paring");
+            Debug.WriteLine(parent.isParing);
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
             pair.connectSocketAsync(this);
         }
@@ -190,6 +191,7 @@ namespace ShareWith
 
         public async void onSocketConnected(StreamSocket s)
         {
+            parent.isParing = false;
             parent.TxtMessage.Text = "Connected.";
 
             //File Choose
