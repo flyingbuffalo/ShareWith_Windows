@@ -81,18 +81,25 @@ namespace ShareWith
         {
         }
 
+        internal bool isDiscovering = false;
         private void btnDiscovery_Click(object sender, RoutedEventArgs e)
         {
+            if (isDiscovering) return;
+
+            isDiscovering = true;
             manager.getDevicesAsync();
             txtMessage.Text = "Finding Devices...";
-
             //this.Frame.Navigate(typeof(DeviceListTestPage));
         }
 
+        internal bool isParing = false;
         private void deviceButton_Click(object sender, RoutedEventArgs e)
         {
+            if (isParing) return;
+
             if (sender is ImageButton)
             {
+                isParing = true;
                 ImageButton deviceBtn = sender as ImageButton;
                 selectedDevice = devList[(int)deviceBtn.Tag];
 
@@ -117,7 +124,7 @@ namespace ShareWith
         public async void onDevicesDiscovered(List<WFDDevice> deviceList)
         {
             parent.devList = deviceList;
-
+            parent.isDiscovering = false;
             if (deviceList.Count != 0)
             {
                 foreach (WFDDevice dev in deviceList)
@@ -144,6 +151,7 @@ namespace ShareWith
         {
             parent.pairInfo = pair;
 
+            parent.isParing = false;
             Debug.WriteLine("MainPage : paring");
             parent.TxtMessage.Text = "Device's IP Address : " + pair.getRemoteAddress();
             pair.connectSocketAsync(this);
