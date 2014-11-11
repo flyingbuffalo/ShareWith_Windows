@@ -163,13 +163,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Downloads\WinRT XAML Toolkit - 1.6.1.3 - Source\WinRTXamlToolkit\WinRTXamlToolkit.csproj">
+      <Project>{7b7966be-213f-4b84-867d-2a0ccf61245f}</Project>
+      <Name>WinRTXamlToolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\WFDWindows\WFDWindows\WFDWindows.csproj">
       <Project>{3f3c9a3d-d672-43d0-b7d1-12df099a0edb}</Project>
       <Name>WFDWindows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\WinRT XAML Toolkit\WinRTXamlToolkit\WinRTXamlToolkit.csproj">
-      <Project>{7b7966be-213f-4b84-867d-2a0ccf61245f}</Project>
-      <Name>WinRTXamlToolkit</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
