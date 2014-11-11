@@ -89,7 +89,7 @@ namespace ShareWith
             //this.Frame.Navigate(typeof(DeviceListTestPage));
         }
 
-        private async void deviceButton_Click(object sender, RoutedEventArgs e)
+        private void deviceButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is ImageButton)
             {
@@ -100,26 +100,6 @@ namespace ShareWith
                 manager.pairAsync(selectedDevice);
             }       
         }
-
-        /* private void deviceButton_Click(object sender, RoutedEventArgs e)
-        {   // progress bar
-            //progress circle test code
-            startProgress();
-
-            //make thread <3
-            System.Threading.Tasks.Task.Run(async () =>
-            {
-                for (int i = 0; i <=  (올림)filesize/buffersize; i++)
-                {
-                    await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                    {
-                        setProgressValue( i / 올림(filesize/buffersize) * 100);
-                    });
-
-                   // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
-                }
-            });
-        }*/
     }
 
 
@@ -148,8 +128,8 @@ namespace ShareWith
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
 
                 //File Choose
-                file = await parent.FileChooser();
-                Debug.WriteLine("FileChooser");
+                 file = await parent.FileChooser();
+                 Debug.WriteLine("FileChooser");
             }
             else
             {
@@ -164,7 +144,7 @@ namespace ShareWith
 
 
         //connceted(device-paring)
-        public async void onDeviceConnected(WFDPairInfo pair)
+        public void onDeviceConnected(WFDPairInfo pair)
         {
             parent.pairInfo = pair;
 
@@ -196,53 +176,7 @@ namespace ShareWith
         public async void onSocketConnected(StreamSocket s)
         {
             parent.TxtMessage.Text = "Connected.";
-            /*
-            DataWriter writer = new DataWriter(s.OutputStream);
-            writer.WriteString("ping~ping~\n");
-
-            writer.StoreAsync();
-            writer.FlushAsync();
-
-            parent.TxtMessage.Text = "Send Message.";
-            //   writer.Dispose();
-            //    s.Dispose();
-            
-            // parent.manager.unpair(parent.pairInfo);
-            */
- /*
-            //File Send
-            int BLOCK_SIZE = 1024;
-
-            StorageFile file = await parent.FileChooser();
-            Debug.WriteLine("FileChooser");
-            BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
-            double fileSize = Convert.ToDouble(fileProperty.Size);
-
-            Debug.WriteLine("onSocketConnected fileSize :" + fileSize);
-        //transferPercent = Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100);
-            await parent.SendFileToPeerAsync(s, file);
-
-            if (fileProperty.Size != 0)
-            {
-                parent.startProgress();
-
-                await System.Threading.Tasks.Task.Run(async () =>
-                {
-                    for (int i = 0; i <= Math.Ceiling(fileSize) / BLOCK_SIZE; i++)
-                    {
-                        await parent.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-                        {
-                            parent.setProgressValue(Convert.ToInt32(Math.Ceiling(fileSize) / BLOCK_SIZE * 100));
-                        });
-                        // await System.Threading.Tasks.Task.Delay(5);안쓰면될걸
-                    }
-                });
-            }
-            else
-            {
-                throw new FileNotFoundException("[Exception] : File is null.");
-            }   
-*/
+     
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             if (fileProperty.Size != 0)
             {
