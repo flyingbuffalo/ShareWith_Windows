@@ -126,10 +126,6 @@ namespace ShareWith
                 }
                 parent.DrawDeviceList(deviceList);
                 parent.TxtMessage.Text = "Found " + deviceList.Count;
-
-                //File Choose
-                 file = await parent.FileChooser();
-                 Debug.WriteLine("FileChooser");
             }
             else
             {
@@ -165,7 +161,8 @@ namespace ShareWith
         }
 
         public async void onSocketReceived(StreamSocket s)
-        {    
+        {
+            parent.startProgress();
             Debug.WriteLine("RECEIVEDD ");
             StorageFolder folder = await parent.FileSave();
             Debug.WriteLine("FileSave");
@@ -176,7 +173,20 @@ namespace ShareWith
         public async void onSocketConnected(StreamSocket s)
         {
             parent.TxtMessage.Text = "Connected.";
-     
+
+            //File Choose
+            try
+            {
+                file = await parent.FileChooser();
+                Debug.WriteLine("FileChooser");
+            }
+            catch (FileNotFoundException e)
+            {
+                parent.TxtMessage.Text = "File not choosed.";
+                parent.pageRoot_Loaded(null,null);
+                return;
+            }
+
             BasicProperties fileProperty = await file.GetBasicPropertiesAsync();
             if (fileProperty.Size != 0)
             {
