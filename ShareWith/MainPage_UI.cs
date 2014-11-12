@@ -122,11 +122,6 @@ namespace ShareWith
             
         }
 
-        private void backToMainPage()
-        {
-
-        }
-
         private void deviceButton_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             if (sender is ImageButton)
