@@ -122,27 +122,9 @@ namespace ShareWith
             
         }
 
-        public void backToMainPage()
+        private void backToMainPage()
         {
-            tbDeviceName.Visibility = Visibility.Collapsed;
-            imgDeviceCircle.Visibility = Visibility.Collapsed;
-            
-            progressBackground.Visibility = Visibility.Collapsed;
-            progressForegroundPath.Visibility = Visibility.Collapsed;
-            
-            tbProgressPersent.Visibility = Visibility.Collapsed;
-            imgProgressDone.Visibility = Visibility.Collapsed;
 
-            btnDiscovery.Visibility = Visibility.Visible;
-
-            //remove image button (device btn)
-            for (int i = canvasGrid.Children.Count - 1; i >= 0; i--)
-            {
-                if (canvasGrid.Children[i] is ImageButton)
-                {
-                    canvasGrid.Children.RemoveAt(i);
-                }
-            }
         }
 
         private void deviceButton_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -232,8 +214,6 @@ namespace ShareWith
                 this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
                 {
                     onProgressDone();
-
-
                 });
             }
         }

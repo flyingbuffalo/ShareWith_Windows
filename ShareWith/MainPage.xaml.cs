@@ -49,7 +49,7 @@ namespace ShareWith
             get { return this.navigationHelper; }
         }
 
-        internal WFDManager manager;
+        private WFDManager manager;
         internal WFDDevice selectedDevice;
         internal WFDPairInfo pairInfo;
         internal List<WFDDevice> devList = new List<WFDDevice>();
@@ -183,9 +183,7 @@ namespace ShareWith
             catch (FileNotFoundException e)
             {
                 parent.TxtMessage.Text = "File not choosed.";
-                s.Dispose();
-                parent.manager.unpair(parent.pairInfo);
-                parent.backToMainPage();
+                parent.pageRoot_Loaded(null,null);
                 return;
             }
 
