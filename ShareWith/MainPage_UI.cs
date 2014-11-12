@@ -87,7 +87,7 @@ namespace ShareWith
         private double _centerX, _centerY;
         private readonly double _circleRadius = 250.0;
         private readonly Duration _animationDuration = new Duration(TimeSpan.FromSeconds(1));
-        public void pageRoot_Loaded(object sender, RoutedEventArgs e)
+        private void pageRoot_Loaded(object sender, RoutedEventArgs e)
         {
             _canvasWidth = canvasGrid.ActualWidth;
             _canvasHeight = canvasGrid.ActualHeight;
