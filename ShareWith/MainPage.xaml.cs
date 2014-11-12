@@ -165,10 +165,10 @@ namespace ShareWith
             parent.backToMainPage();
         }
 
-        public void onDeviceDisconnected(int reasonCode)
+        public void onDeviceDisconnected()
         {
-            Debug.WriteLine("onDeviceDisconnected by reasoncode=" + reasonCode);
-            parent.TxtMessage.Text = ("onDeviceDisconnected by reasoncode=" + reasonCode);
+            Debug.WriteLine("onDeviceDisconnected");
+            parent.TxtMessage.Text = ("onDeviceDisconnected");
             parent.backToMainPage();    
         }
 
