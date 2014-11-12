@@ -168,8 +168,7 @@ namespace ShareWith
         public void onDeviceDisconnected()
         {
             Debug.WriteLine("onDeviceDisconnected");
-            parent.TxtMessage.Text = ("onDeviceDisconnected");
-            parent.backToMainPage();    
+            parent.TxtMessage.Text = ("onDeviceDisconnected"); 
         }
 
         public async void onSocketReceived(StreamSocket s)
@@ -187,7 +186,7 @@ namespace ShareWith
             catch (FileNotFoundException e)
             {
                 s.Dispose();
-                //manager.unpair(pairInfo);
+                parent.manager.unpair(parent.pairInfo);
                 parent.backToMainPage();
             }
         }
