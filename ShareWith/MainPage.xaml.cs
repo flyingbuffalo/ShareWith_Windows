@@ -162,11 +162,14 @@ namespace ShareWith
         {
             Debug.WriteLine("connection failed by reasoncode=" + reasonCode);
             parent.TxtMessage.Text = ("connection failed by reasoncode=" + reasonCode);
+            parent.backToMainPage();
         }
 
-        public void onDeviceDisconnected()
+        public void onDeviceDisconnected(int reasonCode)
         {
-               
+            Debug.WriteLine("onDeviceDisconnected by reasoncode=" + reasonCode);
+            parent.TxtMessage.Text = ("onDeviceDisconnected by reasoncode=" + reasonCode);
+            parent.backToMainPage();    
         }
 
         public async void onSocketReceived(StreamSocket s)
