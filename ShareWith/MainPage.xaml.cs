@@ -164,20 +164,10 @@ namespace ShareWith
         {
             parent.startProgress();
             Debug.WriteLine("RECEIVEDD ");
+            StorageFolder folder = await parent.FileSave();
+            Debug.WriteLine("FileSave");
 
-            try
-            {
-                StorageFolder folder = await parent.FileSave();
-                Debug.WriteLine("FileSave");
-
-                await parent.RecieveFileFromPeerAsync(s, folder);
-            }
-            catch (FileNotFoundException e)
-            {
-                s.Dispose();
-                //manager.unpair(pairInfo);
-                parent.backToMainPage();
-            }
+            await parent.RecieveFileFromPeerAsync(s, folder);
         }
 
         public async void onSocketConnected(StreamSocket s)

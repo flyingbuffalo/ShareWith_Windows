@@ -78,14 +78,15 @@ namespace ShareWith
                 setProgressValue(100);
 
                 //done, 2초후에 원래대로 가자
-                /*await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
                     System.Threading.Tasks.Task.Delay(2);
 
                     socket.Dispose();
                     manager.unpair(pairInfo);
                     backToMainPage();
-                });*/
+                });
             }
         }
 
